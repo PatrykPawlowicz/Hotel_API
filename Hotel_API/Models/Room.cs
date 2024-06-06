@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Hotel_API.Models
 {
         public class Room
         {
-            public int id { get; set; }
+            [Key]
+            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public decimal id_room { get; set; }
             public string number { get; set; }
             public string description { get; set; }
-            public User user { get; set; }
-
         }
 }

@@ -16,7 +16,7 @@ namespace Controllers
             _authRepo = authRepo;
         }
         [HttpPost("register")]
-        public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto req)
+        public async Task<ActionResult<ServiceResponse<decimal>>> Register(UserRegisterDto req)
         {
             var response = await _authRepo.Register(
                 new User { name = req.name, surname = req.surname, email = req.email }, req.password

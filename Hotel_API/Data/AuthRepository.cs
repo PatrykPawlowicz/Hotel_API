@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ namespace Hotel_API.Data
         public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
-            var user = await _context.users.FirstOrDefaultAsync(c => c.email.ToLower().Equals(email.ToLower()));
+            var user = await _context.User.FirstOrDefaultAsync(c => c.email.ToLower().Equals(email.ToLower()));
             if (user == null)
             {
                 response.success = false;
@@ -39,9 +39,9 @@ namespace Hotel_API.Data
             return response;
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<decimal>> Register(User user, string password)
         {
-            ServiceResponse<int> response = new ServiceResponse<int>();
+            ServiceResponse<decimal> response = new ServiceResponse<decimal>();
             if (await UserExists(user.email))
             {
                 response.success = false;
@@ -51,16 +51,16 @@ namespace Hotel_API.Data
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.passwordHash = passwordHash;
             user.passwordSalt = passwordSalt;
-            _context.users.Add(user);
+            _context.User.Add(user);
             await _context.SaveChangesAsync();
 
-            response.data = user.id;
+            response.data = user.id_user;
             return response;
         }
 
         public async Task<bool> UserExists(string email)
         {
-            if (await _context.users.AnyAsync(c => c.email.ToLower().Equals(email.ToLower())))
+            if (await _context.User.AnyAsync(c => c.email.ToLower().Equals(email.ToLower())))
             {
                 return true;
             }
@@ -93,7 +93,7 @@ namespace Hotel_API.Data
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.id_user.ToString()),
                 new Claim(ClaimTypes.Name, user.name)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));

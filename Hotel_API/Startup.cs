@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Hotel_API.Data;
-using Hotel_API.Services.ReservationServices;
-using Hotel_API.Services.RoomServices;
+﻿using Hotel_API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,6 +38,10 @@ namespace Hotel_API
 
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<RoomContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ReservationContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
@@ -57,9 +58,7 @@ namespace Hotel_API
             });
 
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
-            services.AddScoped<IRoomService, RoomService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
