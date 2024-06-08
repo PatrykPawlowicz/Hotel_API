@@ -35,6 +35,7 @@ namespace Hotel_API.Data
             else
             {
                 response.data = CreateToken(user);
+                response.id = user.id_user;
             }
             return response;
         }
