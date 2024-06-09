@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
+using System.Web;
 
 
 namespace Hotel_API.Controllers
@@ -25,9 +26,9 @@ namespace Hotel_API.Controllers
         }
 
         [HttpGet("{id_user}")]
-        public IActionResult GetAll(decimal id_user)
+        public IActionResult GetAll([FromRoute] decimal id_user)
         {
-            var reservations = _context.Reservation.GroupBy(i => i.id_user==id_user);
+            var reservations = _context.Reservation.Where(i => i.id_user == id_user).ToList();
             return Ok(reservations);
         }
 
