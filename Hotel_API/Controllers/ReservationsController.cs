@@ -31,21 +31,16 @@ namespace Hotel_API.Controllers
             return Ok(reservations);
         }
 
-        [HttpPost("{id_user}/{id_room}/{start_date}/{end_date}")]
-        public IActionResult CreateNew(decimal id_user, decimal id_room,DateTime start_date,DateTime end_date)
+        [HttpPost]
+        public IActionResult CreateNew(Reservation newReservation)
         {
-            Reservation newReservation = new Reservation();
-            newReservation.id_user = id_user;
-            newReservation.id_room = id_room;
-            newReservation.start_date = start_date;
-            newReservation.end_date = end_date;
             var reservation = _context.Reservation.Add(newReservation);
             _context.SaveChanges();
             return Ok("New reservation added!");
         }
 
         [HttpPut("{id_rezerwacji}/{start_date}/{end_date}")]
-        public async Task<IActionResult> UpdateDates(DateTime start_date, DateTime end_date,decimal id_rezerwacji)
+        public async Task<IActionResult> UpdateDates(DateOnly start_date, DateOnly end_date,decimal id_rezerwacji)
         {
 
             var newReservation = await _context.Reservation.FirstOrDefaultAsync(i => i.id_reservation == id_rezerwacji);
