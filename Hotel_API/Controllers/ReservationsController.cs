@@ -41,7 +41,7 @@ namespace Hotel_API.Controllers
         }
 
         [HttpPut("{id_rezerwacji}/{start_date}/{end_date}")]
-        public async Task<IActionResult> UpdateDates(DateOnly start_date, DateOnly end_date,decimal id_rezerwacji)
+        public async Task<IActionResult> UpdateDates([FromRoute]  DateOnly start_date, [FromRoute] DateOnly end_date, [FromRoute] decimal id_rezerwacji)
         {
 
             var newReservation = await _context.Reservation.FirstOrDefaultAsync(i => i.id_reservation == id_rezerwacji);
